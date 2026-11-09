@@ -1,3 +1,5 @@
+// Purpose: Render admin member management, role filters, and staff workload totals.
+// Role: Keep user access and staff performance controls together in the people workspace.
 import { useState } from 'react';
 import { api } from '../../services/alertHubApi.js';
 

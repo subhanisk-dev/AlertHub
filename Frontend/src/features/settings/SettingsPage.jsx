@@ -1,3 +1,5 @@
+// Purpose: Render account and workspace notification settings.
+// Role: Show live connection state and manage optional browser push subscriptions.
 // Present live connection and browser push settings for the workspace.
 export function SettingsPage({
   socketLive,

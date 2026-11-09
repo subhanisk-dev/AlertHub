@@ -1,3 +1,5 @@
+// Purpose: Render role-aware overview metrics and incident analytics.
+// Role: Summarize the correct user, staff, or workspace workload without duplicating page data.
 import { Category, Metric } from '../components/DashboardWidgets.jsx'
 import { categoryColors } from '../services/alertHubApi.js'
 

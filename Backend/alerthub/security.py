@@ -1,3 +1,5 @@
+# Purpose: Define the shared JWT authentication and role authorization checks.
+# Role: Protect Flask routes and incident access according to each account's role.
 """Build role-aware decorators for protected Flask endpoints."""
 
 from functools import wraps

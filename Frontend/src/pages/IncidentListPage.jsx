@@ -1,3 +1,5 @@
+// Purpose: Render incident lists, search controls, and board or table views.
+// Role: Help each role find and manage only the incidents its permissions allow.
 import { IncidentBoard, IncidentTable } from '../components/DashboardWidgets.jsx'
 import { statuses } from '../services/alertHubApi.js'
 

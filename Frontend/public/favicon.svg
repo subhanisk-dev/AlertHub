@@ -1,1 +1,3 @@
+<!-- Purpose: Draw the small AlertHub icon used by browser tabs and bookmarks. -->
+<!-- Role: Keep the site identity visible without downloading an external image. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#ee6838"/><path d="M17 44V26c0-8 5-13 14-13h5v9h-4c-4 0-6 2-6 6v16z" fill="#fff4e8"/><circle cx="45" cy="42" r="5" fill="#f3c361"/></svg>

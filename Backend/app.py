@@ -1,3 +1,5 @@
+# Purpose: Register AlertHub's Flask API routes and Socket.IO event handlers.
+# Role: Coordinate authentication, incidents, notifications, reporting, and live updates.
 """AlertHub API entry point. See ../docs/PROJECT_GUIDE.md for the feature map."""
 
 import json

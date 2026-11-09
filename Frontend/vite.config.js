@@ -1,3 +1,5 @@
+// Purpose: Configure Vite's React development and production build behavior.
+// Role: Enable JSX refresh locally and proxy local API and Socket.IO calls to Flask.
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 

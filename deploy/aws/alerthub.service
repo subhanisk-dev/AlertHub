@@ -1,4 +1,6 @@
 [Unit]
+# Purpose: Define the Linux service that runs AlertHub's Flask and Socket.IO API.
+# Role: Start Gunicorn at boot, load protected settings, and restart the backend after failures.
 Description=AlertHub Flask and Socket.IO API
 After=network.target mysql.service caddy.service
 Wants=caddy.service

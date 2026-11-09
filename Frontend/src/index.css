@@ -1,3 +1,5 @@
+/* Purpose: Define global colors, typography, resets, and shared page defaults. */
+/* Role: Give every AlertHub screen a consistent base before component styles load. */
 /* Shared typography and page defaults for the AlertHub frontend. */
 :root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;

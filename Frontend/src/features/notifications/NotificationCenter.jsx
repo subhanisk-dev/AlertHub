@@ -1,3 +1,5 @@
+// Purpose: Render the signed-in member's notification center and unread count.
+// Role: Mark notifications read and keep the visible list in sync with live events.
 import { api } from '../../services/alertHubApi.js';
 
 // Show unread notifications and mark each one read when the member opens it.

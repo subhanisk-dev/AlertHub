@@ -1,3 +1,5 @@
+// Purpose: Render reusable incident-resolution and detail controls.
+// Role: Let authorized staff and admins explain fixes or closure decisions consistently.
 // Lets staff and admins record a fix or explain why a report was closed.
 export function ResolutionNotes({ incident, onChange, onSave }) {
   return (

@@ -1,3 +1,5 @@
+# Purpose: Reset an existing administrator password from the backend console.
+# Role: Recover admin access without opening a public password-reset endpoint.
 """Set a new password for an existing AlertHub admin account."""
 #python reset_admin_password.py admin@example.com
 

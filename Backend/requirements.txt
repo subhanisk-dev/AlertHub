@@ -1,3 +1,5 @@
+# Purpose: Pin the Python libraries required by the Flask and Socket.IO backend.
+# Role: Reproduce the same API, MySQL, authentication, push, and Gunicorn runtime during setup.
 Flask==3.1.2
 Flask-Cors==6.0.1
 Flask-SocketIO==5.5.1

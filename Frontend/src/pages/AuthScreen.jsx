@@ -1,3 +1,5 @@
+// Purpose: Render the sign-in and account-registration screens.
+// Role: Let users and staff authenticate or create accounts before entering the workspace.
 import { useState } from 'react';
 import { api } from '../services/alertHubApi.js';
 

@@ -1,3 +1,5 @@
+// Purpose: Render the scheduled maintenance form and maintenance history.
+// Role: Let admins publish, edit, and cancel service windows shown to the workspace.
 import { useState } from 'react'
 import { api } from '../services/alertHubApi.js'
 

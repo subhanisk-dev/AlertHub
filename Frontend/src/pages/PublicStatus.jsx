@@ -1,3 +1,5 @@
+// Purpose: Render public service health and scheduled maintenance information.
+// Role: Let visitors check system status without signing into AlertHub.
 import { useEffect, useState } from 'react'
 import { api } from '../services/alertHubApi.js'
 

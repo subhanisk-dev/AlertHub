@@ -1,3 +1,5 @@
+# Purpose: Centralize MySQL connections, parameterized queries, and schema setup.
+# Role: Keep database access consistent and apply the shared schema during local setup or deployment.
 """Centralize MySQL connections, parameterized queries, and schema setup."""
 
 import os

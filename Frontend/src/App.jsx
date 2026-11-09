@@ -1,3 +1,5 @@
+// Purpose: Own the AlertHub application shell, role navigation, and shared state.
+// Role: Connect page actions to Flask APIs and apply live Socket.IO updates across roles.
 // AlertHub application shell; see ../../docs/PROJECT_GUIDE.md before extending a feature.
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import './App.css';

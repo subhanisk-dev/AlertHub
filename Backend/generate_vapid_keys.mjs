@@ -1,3 +1,5 @@
+// Purpose: Generate the public and private VAPID keys used by browser push notifications.
+// Role: Save the public key to local settings and keep the signing key in an ignored private file.
 // Create a VAPID key pair for local browser push and save it to ignored backend files.
 import { generateKeyPairSync } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';

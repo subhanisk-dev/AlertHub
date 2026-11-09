@@ -1,3 +1,5 @@
+// Purpose: Provide reusable dashboard metrics, charts, incident tables, and boards.
+// Role: Keep the admin, staff, and user dashboard views consistent and data-driven.
 import { statuses } from '../services/alertHubApi.js'
 
 // Shows one dashboard total with its label and supporting context.

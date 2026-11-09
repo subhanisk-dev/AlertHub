@@ -1,3 +1,5 @@
+-- Purpose: Define the MySQL tables and indexes used by AlertHub features.
+-- Role: Keep database structure in one source shared by local setup and deployment migrations.
 -- Optional manual schema setup; python Backend/app.py creates these tables too.
 CREATE DATABASE IF NOT EXISTS alerthub CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE alerthub;

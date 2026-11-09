@@ -1,3 +1,5 @@
+/* Purpose: Style AlertHub pages, dashboards, dialogs, and responsive layouts. */
+/* Role: Keep visual treatment consistent while index.css owns global defaults. */
 /* App shell and page styles; global resets and base type live in index.css. */
 .app-shell {
   min-height:100vh;

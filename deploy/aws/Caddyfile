@@ -1,3 +1,5 @@
+# Purpose: Configure Caddy as the public HTTPS gateway for the Flask API.
+# Role: Obtain TLS certificates and proxy HTTP or Socket.IO requests to the private Gunicorn port.
 api.example.com {
     encode zstd gzip
 

@@ -1,3 +1,5 @@
+# Purpose: Load the environment settings used by Flask, MySQL, and background tasks.
+# Role: Reject unsafe production secrets and browser origins before the API starts.
 """Load and validate environment-backed application settings."""
 
 import os

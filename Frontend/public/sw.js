@@ -1,3 +1,5 @@
+// Purpose: Handle browser push events while the AlertHub page is not open.
+// Role: Show the incident update as a system notification and open the app when selected.
 // Displays a background push message when AlertHub is not open.
 self.addEventListener('push', event => {
   let payload = {

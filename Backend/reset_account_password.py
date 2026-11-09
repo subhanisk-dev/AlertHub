@@ -1,3 +1,5 @@
+# Purpose: Reset a selected account password from a trusted server console.
+# Role: Restore access without email delivery or exposing the new password in shell history.
 """Let an administrator reset any AlertHub account without sending email."""
 
 import sys

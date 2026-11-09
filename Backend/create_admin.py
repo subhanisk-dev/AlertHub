@@ -1,3 +1,5 @@
+# Purpose: Create the first administrator account in an initialized AlertHub database.
+# Role: Provide a safe command-line setup path without enabling public admin registration.
 """Create the initial admin. Usage: python create_admin.py name email password"""
 #python create_admin.py "Admin Name" admin@example.com
 

@@ -1,3 +1,5 @@
+// Purpose: Configure ESLint rules for the frontend JavaScript and React files.
+// Role: Catch common code errors and enforce safe React hook usage during development.
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

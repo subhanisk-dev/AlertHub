@@ -1,3 +1,5 @@
+// Purpose: Centralize frontend API requests, authentication state, and Socket.IO access.
+// Role: Keep HTTP, session expiry, live updates, and incident mapping consistent across pages.
 // Shared HTTP, session, and realtime helpers used across the frontend.
 // Call Flask directly for local use; override this only when the backend has another URL.
 // Use Vite's local proxy in development and the deployed site's own origin in production.
