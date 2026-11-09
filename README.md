@@ -4,7 +4,7 @@ AlertHub is an incident reporting and response workspace. Users report issues an
 
 For a code map, feature lookup, role rules, and safe extension steps, see [the project guide](docs/PROJECT_GUIDE.md).
 
-For a production deployment with Docker, MySQL, HTTPS, persistent uploads, and live WebSockets, see [the production deployment guide](deploy/PRODUCTION.md).
+For production deployment, use Vercel for the frontend and AWS EC2 for Flask, MySQL, uploads, HTTPS, and live WebSockets. Follow [the Vercel and AWS deployment guide](deploy/VERCEL_AWS.md).
 
 ## Run locally
 

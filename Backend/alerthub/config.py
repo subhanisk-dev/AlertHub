@@ -27,12 +27,8 @@ def validate_production_settings():
     if len(jwt_secret) < 32 or jwt_secret.startswith("REPLACE_"):
         raise RuntimeError("Production requires a random JWT_SECRET with at least 32 characters.")
 
-    secret_names = (
-        "DB_PASSWORD",
-        "MIGRATION_DB_PASSWORD",
-        "MYSQL_ROOT_PASSWORD",
-        "MYSQL_RUNTIME_PASSWORD",
-    )
+    # Validate only the two MySQL accounts used by the API and schema migration.
+    secret_names = ["DB_PASSWORD", "MIGRATION_DB_PASSWORD"]
     weak_secrets = [
         name
         for name in secret_names
@@ -59,9 +55,6 @@ def validate_production_settings():
         for origin in frontend_origins
     ):
         raise RuntimeError("Production FRONTEND_ORIGIN must list trusted public HTTPS origins.")
-    if f"https://{public_domain}" not in frontend_origins:
-        raise RuntimeError("FRONTEND_ORIGIN must include the configured public HTTPS domain.")
-
     required_settings = (
         "DB_HOST",
         "DB_USER",

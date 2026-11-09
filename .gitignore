@@ -4,6 +4,7 @@ Backend/venv/
 Backend/.venv/
 Backend/__pycache__/
 Backend/uploads/
+# Never commit production secrets or private-key files.
 secrets/
 .env.production
 backups/

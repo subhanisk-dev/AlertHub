@@ -1,0 +1,24 @@
+[Unit]
+Description=AlertHub Flask and Socket.IO API
+After=network.target mysql.service caddy.service
+Wants=caddy.service
+
+[Service]
+Type=simple
+User=alerthub
+Group=alerthub
+WorkingDirectory=/opt/alerthub/Backend
+EnvironmentFile=/etc/alerthub/alerthub.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/alerthub/venv/bin/gunicorn --worker-class gthread --workers 1 --threads 100 --bind 127.0.0.1:5000 --timeout 120 --access-logfile - --error-logfile - wsgi:app
+Restart=always
+RestartSec=5
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/alerthub
+
+[Install]
+WantedBy=multi-user.target
