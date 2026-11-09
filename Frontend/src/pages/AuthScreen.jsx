@@ -121,13 +121,13 @@ export function AuthScreen({ onAuth, notice }) {
           )}
           {error && <div className="auth-error">{error}</div>}
 
-          <button className="auth-submit" disabled={busy}>
+          <button aria-label={busy ? 'Please wait' : mode === 'login' ? 'Sign in' : 'Create account'} className="auth-submit" disabled={busy}>
             {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
             <span>→</span>
           </button>
           <div className="auth-switch">
             {mode === 'login' ? 'New to AlertHub?' : 'Already have an account?'}
-            <button type="button" onClick={toggleMode}>
+            <button type="button" aria-label={mode === 'login' ? 'Create an account' : 'Sign in'} onClick={toggleMode}>
               {mode === 'login' ? 'Create an account' : 'Sign in'}
             </button>
           </div>

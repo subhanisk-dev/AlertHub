@@ -1,17 +1,19 @@
 // AlertHub application shell; see ../../docs/PROJECT_GUIDE.md before extending a feature.
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
 import { API_URL, api, getTokenExpiresAt, icons, readSession, socketConnect, statuses, toUiIncident, vapidBytes } from './services/alertHubApi.js';
 import { ResolutionNotes } from './components/IncidentDetails.jsx';
 import { IncidentTable } from './components/DashboardWidgets.jsx';
-import { OverviewPage } from './pages/OverviewPage.jsx';
 import { AuthScreen } from './pages/AuthScreen.jsx';
-import { PublicStatus } from './pages/PublicStatus.jsx';
-import { IncidentListPage } from './pages/IncidentListPage.jsx';
-import { MaintenancePage } from './pages/MaintenancePage.jsx';
-import { PeoplePage } from './features/people/PeoplePage.jsx';
-import { NotificationCenter } from './features/notifications/NotificationCenter.jsx';
-import { SettingsPage } from './features/settings/SettingsPage.jsx';
+// Load page features only when a member visits them to keep the first route small.
+const lazyNamed = (load, name) => lazy(async () => ({ default: (await load())[name] }));
+const OverviewPage = lazyNamed(() => import('./pages/OverviewPage.jsx'), 'OverviewPage');
+const PublicStatus = lazyNamed(() => import('./pages/PublicStatus.jsx'), 'PublicStatus');
+const IncidentListPage = lazyNamed(() => import('./pages/IncidentListPage.jsx'), 'IncidentListPage');
+const MaintenancePage = lazyNamed(() => import('./pages/MaintenancePage.jsx'), 'MaintenancePage');
+const PeoplePage = lazyNamed(() => import('./features/people/PeoplePage.jsx'), 'PeoplePage');
+const NotificationCenter = lazyNamed(() => import('./features/notifications/NotificationCenter.jsx'), 'NotificationCenter');
+const SettingsPage = lazyNamed(() => import('./features/settings/SettingsPage.jsx'), 'SettingsPage');
 
 // Merge live notifications by database ID so overlapping socket events and API refreshes cannot duplicate or erase them.
 const mergeNotifications = (current, incoming) => {
@@ -567,7 +569,7 @@ function App() {
       setError(err.message);
     }
   };
-  if (window.location.pathname === '/status') return <PublicStatus />;
+  if (window.location.pathname === '/status') return <Suspense fallback={<main className="page-loading" role="status">Loading public status…</main>}><PublicStatus /></Suspense>;
   if (!session?.token) return <AuthScreen notice={authNotice} onAuth={value => {
     localStorage.setItem('alerthub_session', JSON.stringify(value));
     setSession(value);
@@ -579,7 +581,7 @@ function App() {
   return <div className="app-shell">
     <aside className="sidebar">
       <a className="brand" href="#top" onClick={() => setPage(role === 'User' ? 'My incidents' : 'Overview')}><span className="brand-mark">a<span>•</span></span><span className="brand-name">alert<span>hub</span><small>INCIDENT RESPONSE</small></span></a>
-      <div className="workspace" aria-label="Current workspace">
+      <div className="workspace" role="group" aria-label="Current workspace">
         <span className="workspace-icon" aria-hidden="true">{role[0]}</span>
         <span className="workspace-copy">
           <b>AlertHub Workspace</b>
@@ -592,7 +594,7 @@ function App() {
         : role === 'Staff'
           ? [['Overview', 'overview'], ['Assigned incidents', 'incidents'], ['Reported incidents', 'mine'], ['Analytics', 'analytics']]
           : [['Overview', 'overview'], ['All incidents', 'incidents'], ['Analytics', 'analytics'], ['People', '◎'], ['Maintenance', '◷']]
-      ).map(([name, icon]) => <button key={name} aria-current={page === name ? 'page' : undefined} className={`nav-item ${page === name ? 'active' : ''}`} onClick={async () => {
+      ).map(([name, icon]) => <button key={name} aria-label={name} aria-current={page === name ? 'page' : undefined} className={`nav-item ${page === name ? 'active' : ''}`} onClick={async () => {
           setPage(name);
           try {
             if (name === 'People') setUsers(await api('/api/admin/users'));
@@ -601,7 +603,7 @@ function App() {
             setError(err.message);
           }
         }}><span className="nav-icon">{icons[icon] || icon}</span>{name}{role === 'Admin' && name === 'All incidents' && <span className="nav-count" title="Open incidents">{incidents.filter(item => item.status === 'Pending' || item.status === 'In progress').length}</span>}</button>)}</nav>
-      <p className="nav-label manage-label">MANAGE</p><button aria-current={page === 'Settings' ? 'page' : undefined} className={`nav-item ${page === 'Settings' ? 'active' : ''}`} onClick={() => setPage('Settings')}><span className="nav-icon">{icons.settings}</span>Settings</button>
+      <p className="nav-label manage-label">MANAGE</p><button aria-label="Settings" aria-current={page === 'Settings' ? 'page' : undefined} className={`nav-item ${page === 'Settings' ? 'active' : ''}`} onClick={() => setPage('Settings')}><span className="nav-icon">{icons.settings}</span>Settings</button>
       <div className="sidebar-bottom">
         <div className="live-card">
           <div className="live-head"><span className="pulse" /> LIVE SYSTEM STATUS</div>
@@ -632,11 +634,11 @@ function App() {
       </div>
     </aside>
     <main className="main" id="top"><header className="topbar">
-        <div className="breadcrumbs" aria-label="Current page">
+        <nav className="breadcrumbs" aria-label="Current page">
           <span className="breadcrumb-root">AlertHub</span>
           <span aria-hidden="true">/</span>
           <b>{page}</b>
-        </div>
+        </nav>
         <div className="top-actions">
           <div className="account-chip" aria-label={`Signed in with ${role} access`}>
             <span>ACCOUNT</span>
@@ -678,7 +680,7 @@ function App() {
             )}
           </button>
           <span className="divider" aria-hidden="true" />
-          <button className="signout-button" onClick={() => {
+          <button className="signout-button" aria-label="Sign out" onClick={() => {
             localStorage.removeItem('alerthub_session');
             setSession(null);
             setNotifications([]);
@@ -702,7 +704,7 @@ function App() {
           </button>
         </div>
       </header>
-      <NotificationCenter
+      {notificationOpen && <Suspense fallback={null}><NotificationCenter
         open={notificationOpen}
         notifications={notifications}
         setNotifications={setNotifications}
@@ -710,21 +712,22 @@ function App() {
         openIncident={openIncident}
         onClose={() => setNotificationOpen(false)}
         onError={setError}
-      />
+      /></Suspense>}
       <div className="content"><div className="page-heading"><div><div className="eyebrow"><span className="pulse" /> {new Intl.DateTimeFormat('en-US', {
                 weekday: 'long',
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric'
-              }).format(new Date()).toUpperCase()}</div><h1>{role === 'User' ? `${greeting}, ${session.user?.name?.split(' ')[0] || 'there'}` : page === 'Overview' ? `${greeting}, ${session.user?.name?.split(' ')[0] || 'there'}` : page}</h1><p>{role === 'User' ? 'Here are your reports and the latest updates from your team.' : page === 'Overview' ? 'Here’s what’s happening across your workspace today.' : page === 'My incidents' || page === 'Reported incidents' ? 'Track the issues you have reported.' : page === 'Assigned incidents' ? 'Review and update incidents assigned to you.' : page === 'Analytics' ? 'A closer look at incident activity and team response.' : page === 'Settings' ? 'Manage your workspace preferences.' : 'Review, assign, and resolve reported issues.'}</p></div>{role !== 'Admin' && <button className="primary-button" onClick={() => setModal(true)}><span>＋</span> Report an incident</button>}</div>
+              }).format(new Date()).toUpperCase()}</div><h1>{role === 'User' ? `${greeting}, ${session.user?.name?.split(' ')[0] || 'there'}` : page === 'Overview' ? `${greeting}, ${session.user?.name?.split(' ')[0] || 'there'}` : page}</h1><p>{role === 'User' ? 'Here are your reports and the latest updates from your team.' : page === 'Overview' ? 'Here’s what’s happening across your workspace today.' : page === 'My incidents' || page === 'Reported incidents' ? 'Track the issues you have reported.' : page === 'Assigned incidents' ? 'Review and update incidents assigned to you.' : page === 'Analytics' ? 'A closer look at incident activity and team response.' : page === 'Settings' ? 'Manage your workspace preferences.' : 'Review, assign, and resolve reported issues.'}</p></div>{role !== 'Admin' && <button aria-label="Report an incident" className="primary-button" onClick={() => setModal(true)}><span aria-hidden="true">＋</span> Report an incident</button>}</div>
       {statusInfo?.maintenance && <div className="maintenance-banner"><span>◷</span><div><b>Scheduled maintenance: {statusInfo.maintenance.title}</b><small>{statusInfo.maintenance.description} · {new Date(statusInfo.maintenance.starts_at).toLocaleString()} – {new Date(statusInfo.maintenance.ends_at).toLocaleString()}</small></div></div>}
       {/* Overview and analytics display workspace summaries and team activity. */}
+      <Suspense fallback={<div className="page-loading" role="status">Loading workspace…</div>}>
       {(page === 'Overview' || page === 'Analytics') && (
         <OverviewPage page={page} analytics={analyticsData} counts={counts} role={role} />
       )}
-      {error && <div className="error-banner"><b>!</b>{error}<button onClick={() => setError('')}>Dismiss</button></div>}
+      {error && <div className="error-banner"><b aria-hidden="true">!</b>{error}<button aria-label="Dismiss error" onClick={() => setError('')}>Dismiss</button></div>}
       {!apiReady && <div className="error-banner"><b>↻</b>Connecting to AlertHub API…</div>}
-      {page === 'Overview' && <div className="panel incident-panel"><div className="panel-heading incident-heading"><div><h2>{role === 'Staff' ? 'My assigned work' : 'Recent incidents'} <span className="live-tag"><i /> LIVE</span></h2><p>{role === 'Staff' ? 'Incidents assigned to you, updated live.' : 'Stay on top of the latest reports and updates.'}</p></div><button className="text-button" onClick={() => setPage(role === 'Staff' ? 'Assigned incidents' : 'All incidents')}>{role === 'Staff' ? 'View assignments' : 'View all incidents'} <span>→</span></button></div><IncidentTable items={visible.slice(0, 4)} role={role} update={updateIncident} open={openIncident} /></div>}
+      {page === 'Overview' && <div className="panel incident-panel"><div className="panel-heading incident-heading"><div><h2>{role === 'Staff' ? 'My assigned work' : 'Recent incidents'} <span className="live-tag"><i /> LIVE</span></h2><p>{role === 'Staff' ? 'Incidents assigned to you, updated live.' : 'Stay on top of the latest reports and updates.'}</p></div><button aria-label={role === 'Staff' ? 'View assignments' : 'View all incidents'} className="text-button" onClick={() => setPage(role === 'Staff' ? 'Assigned incidents' : 'All incidents')}>{role === 'Staff' ? 'View assignments' : 'View all incidents'} <span aria-hidden="true">→</span></button></div><IncidentTable items={visible.slice(0, 4)} role={role} update={updateIncident} open={openIncident} /></div>}
       {/* Incident operations page: search, filter, export, and switch layouts. */}
       {(page === 'All incidents' || page === 'Assigned incidents') && (
         <IncidentListPage
@@ -752,7 +755,7 @@ function App() {
         />
       )}
       {/* Personal history page: show only the signed-in member's reports. */}
-      {(page === 'My incidents' || page === 'Reported incidents') && <div className="panel incident-panel"><div className="panel-heading incident-heading"><div><h2>{role === 'Staff' ? 'Reported incidents' : 'Your reports'}</h2><p>Only incidents you reported appear here. Updates arrive in real time.</p></div>{role !== 'Admin' && <button className="primary-button" onClick={() => setModal(true)}>＋ New report</button>}</div><IncidentTable items={role === 'Staff' ? staffReports : visible} role={role === 'Staff' ? 'User' : role} update={updateIncident} open={openIncident} /></div>}
+      {(page === 'My incidents' || page === 'Reported incidents') && <div className="panel incident-panel"><div className="panel-heading incident-heading"><div><h2>{role === 'Staff' ? 'Reported incidents' : 'Your reports'}</h2><p>Only incidents you reported appear here. Updates arrive in real time.</p></div>{role !== 'Admin' && <button aria-label="Create a new incident report" className="primary-button" onClick={() => setModal(true)}>＋ New report</button>}</div><IncidentTable items={role === 'Staff' ? staffReports : visible} role={role === 'Staff' ? 'User' : role} update={updateIncident} open={openIncident} /></div>}
       {/* People tools live in their own feature component. */}
       {page === 'People' && <PeoplePage users={users} setUsers={setUsers} onError={setError} />}
       {/* Maintenance page: publish service windows and reporting pauses. */}
@@ -775,9 +778,10 @@ function App() {
           disablePush={disablePush}
         />
       )}
+      </Suspense>
       <footer>© 2026 AlertHub <span>•</span> Built for faster response <span className="footer-right">STATUS <i /> ALL SYSTEMS OPERATIONAL</span></footer></div>
     </main>
-    {modal && <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && setModal(false)}><form className="modal" onSubmit={submit}><div className="modal-head"><div><span className="modal-kicker">NEW REPORT</span><h2>Report an incident</h2><p>Give your team the details they need to help.</p></div><button type="button" className="close" onClick={() => setModal(false)}>×</button></div><label>Incident title<input required maxLength="120" placeholder="e.g. Wi-Fi not working in Lab 2" value={form.title} onChange={e => setForm({
+    {modal && <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && setModal(false)}><form className="modal" onSubmit={submit}><div className="modal-head"><div><span className="modal-kicker">NEW REPORT</span><h2>Report an incident</h2><p>Give your team the details they need to help.</p></div><button type="button" className="close" aria-label="Close report form" onClick={() => setModal(false)}>×</button></div><label>Incident title<input required maxLength="120" placeholder="e.g. Wi-Fi not working in Lab 2" value={form.title} onChange={e => setForm({
             ...form,
             title: e.target.value
           })} onBlur={checkSimilar} /></label>{similar.length > 0 && <div className="duplicate-warning"><b>Similar open reports</b><small>Check these before submitting a duplicate:</small>{similar.map(item => <span key={item.id}>AH-{String(item.id).padStart(4, '0')} · {item.title} · {item.status}</span>)}</div>}<label>Description<textarea required rows="3" placeholder="What happened? Include any details that might help..." value={form.description} onChange={e => setForm({
@@ -793,7 +797,7 @@ function App() {
             ...form,
             location: e.target.value
           })} onBlur={checkSimilar} /></label><label>Photo or document <small>JPG, PNG, WebP, or PDF · up to 8 MB</small><input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={e => setAttachment(e.target.files?.[0] || null)} /></label><div className="modal-foot"><button type="button" className="outline-button" onClick={() => setModal(false)}>Cancel</button><button className="primary-button">Submit report <span>→</span></button></div></form></div>}
-    {selected && <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && setSelected(null)}><div className="modal detail-modal"><div className="modal-head"><div><span className="modal-kicker">{selected.id} · {selected.category}</span><h2>{selected.title}</h2><p>{selected.location} · Reported {selected.time} by {selected.reporter}</p></div><button className="close" onClick={() => setSelected(null)}>×</button></div><p className="detail-description">{selected.description}</p><div className="detail-controls"><label>Status<select disabled={role === 'User'} value={selected.status} onChange={e => {
+    {selected && <div className="modal-backdrop" onMouseDown={e => e.target === e.currentTarget && setSelected(null)}><div className="modal detail-modal"><div className="modal-head"><div><span className="modal-kicker">{selected.id} · {selected.category}</span><h2>{selected.title}</h2><p>{selected.location} · Reported {selected.time} by {selected.reporter}</p></div><button className="close" aria-label="Close incident details" onClick={() => setSelected(null)}>×</button></div><p className="detail-description">{selected.description}</p><div className="detail-controls"><label>Status<select disabled={role === 'User'} value={selected.status} onChange={e => {
               updateIncident(selected.id, 'status', e.target.value);
               setSelected({
                 ...selected,
@@ -841,7 +845,7 @@ function App() {
               } catch (err) {
                 setError(err.message);
               }
-            }}>★</button>)}</div></div>}{selected.rating && <div className="rating-box">Your rating: {'★'.repeat(selected.rating)}</div>}{role !== 'User' && <ResolutionNotes incident={selected} onChange={value => setSelected({
+            }} aria-label={`Rate incident ${selected.title} ${star} out of 5`}>★</button>)}</div></div>}{selected.rating && <div className="rating-box">Your rating: {'★'.repeat(selected.rating)}</div>}{role !== 'User' && <ResolutionNotes incident={selected} onChange={value => setSelected({
           ...selected,
           resolution_notes: value
         })} onSave={saveResolution} />}{role !== 'User' && <details className="audit-details"><summary>Audit trail · {selected.audit?.length || 0} updates</summary>{selected.audit?.map((entry, index) => <div key={index}><b>{entry.actor_name}</b> · {entry.action} — {entry.detail}<small>{entry.created_at}</small></div>)}</details>}<div className="discussion"><h3>{role === 'Admin' ? 'Team discussion' : 'Activity & discussion'} <span>{(selected.comments || []).length}</span></h3>{role === 'Admin' && <small className="discussion-note">Admin messages are visible to staff and admins only.</small>}{(selected.comments || []).map((c, i) => <div className="activity-item" key={c.id || i}><span className="timeline-dot lime-dot" /><span><b>{c.user_name || 'You'}</b> · {c.body || c}<small>{c.created_at ? 'Recent' : 'Just now'}</small></span></div>)}{typingUser && <div className="typing-indicator">{typingUser} is typing…</div>}<form className="comment-form" onSubmit={e => {

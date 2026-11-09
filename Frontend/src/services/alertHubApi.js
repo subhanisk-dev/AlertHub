@@ -1,5 +1,3 @@
-import { io } from 'socket.io-client'
-
 // Shared HTTP, session, and realtime helpers used across the frontend.
 // Call Flask directly for local use; override this only when the backend has another URL.
 export const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000')
@@ -72,29 +70,37 @@ export async function api(path, options = {}) {
 
 // Opens an authenticated Socket.IO connection and delegates heartbeats and retries to its client.
 export function socketConnect(token, onEvent, onConnection) {
-  const socket = io(API_URL || window.location.origin, {
-    path: '/socket.io',
-    transports: ['websocket'],
-    auth: { token },
-    reconnection: true,
-    reconnectionDelay: 1000,
-    reconnectionDelayMax: 5000,
-    timeout: 10000,
-  })
+  let socket = null
+  let closed = false
 
-  socket.on('connect', () => onConnection(true))
-  socket.on('disconnect', () => onConnection(false))
-  socket.on('connect_error', () => onConnection(false))
-  socket.onAny((event, ...args) => onEvent(event, args[0]))
+  // Defer the realtime client until an authenticated session actually opens a socket.
+  import('socket.io-client').then(({ io }) => {
+    if (closed) return
+    socket = io(API_URL || window.location.origin, {
+      path: '/socket.io',
+      transports: ['websocket'],
+      auth: { token },
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      timeout: 10000,
+    })
+
+    socket.on('connect', () => onConnection(true))
+    socket.on('disconnect', () => onConnection(false))
+    socket.on('connect_error', () => onConnection(false))
+    socket.onAny((event, ...args) => onEvent(event, args[0]))
+  }).catch(() => onConnection(false))
 
   return {
     // Stops the socket and its automatic retries.
     close() {
-      socket.disconnect()
+      closed = true
+      socket?.disconnect()
     },
     // Sends an application event through the authenticated connection.
     send(event, payload) {
-      if (socket.connected) socket.emit(event, payload)
+      if (socket?.connected) socket.emit(event, payload)
     },
   }
 }

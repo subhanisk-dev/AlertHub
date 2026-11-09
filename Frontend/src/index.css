@@ -1,13 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-
 /* Shared typography and page defaults for the AlertHub frontend. */
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #e8ebf4;
   background: #090b11;
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  font-optical-sizing: auto;
   font-weight: 400;
   font-size: 14px;
 }

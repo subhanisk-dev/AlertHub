@@ -130,7 +130,7 @@ function ActivityChart({ activity, peak, line, fill, escalations, role }) {
         </div>
         <div className="chart">
           <div className="gridlines"><i /><i /><i /><i /><i /></div>
-          <svg viewBox="0 0 700 180" preserveAspectRatio="none" aria-label="Incident activity chart">
+          <svg viewBox="0 0 700 180" preserveAspectRatio="none" role="img" aria-label="Incident activity chart">
             <defs>
               <linearGradient id="incident-chart-fill" x1="0" x2="0" y1="0" y2="1">
                 <stop offset="0%" stopColor="#e96836" stopOpacity=".24" />

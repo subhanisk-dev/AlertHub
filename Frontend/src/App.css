@@ -31,7 +31,7 @@
   background:#4169ff;
   display:grid;
   place-items:center;
-  font:800 20px Manrope;
+  font:800 20px system-ui, sans-serif;
   box-shadow:0 4px 22px #4169ff55
 }
 .brand-mark span {
@@ -39,7 +39,7 @@
   margin-left:1px
 }
 .brand-name {
-  font:800 17px Manrope;
+  font:800 17px system-ui, sans-serif;
   letter-spacing:-.8px
 }
 .brand-name>span {
@@ -48,7 +48,7 @@
 .brand-name small {
   display:block;
   color:#777d8e;
-  font:600 8px 'DM Sans';
+  font:600 8px system-ui, sans-serif;
   letter-spacing:1.6px;
   margin-top:1px
 }
@@ -361,7 +361,7 @@
   margin-bottom:10px
 }
 .page-heading h1 {
-  font:700 25px Manrope;
+  font:700 25px system-ui, sans-serif;
   letter-spacing:-.7px;
   margin:0;
   color:#f2f3f8
@@ -437,12 +437,12 @@
   color:#80e3af
 }
 .metric-value {
-  font:700 25px Manrope;
+  font:700 25px system-ui, sans-serif;
   letter-spacing:-.9px;
   margin-top:9px
 }
 .metric-value span {
-  font:600 9px 'DM Sans';
+  font:600 9px system-ui, sans-serif;
   letter-spacing:0;
   background:#173126;
   color:#65d69a;
@@ -479,7 +479,7 @@
   justify-content:space-between
 }
 .panel-heading h2 {
-  font:700 13px Manrope;
+  font:700 13px system-ui, sans-serif;
   margin:0;
   color:#eff1f7
 }
@@ -605,7 +605,7 @@
   flex-direction:column
 }
 .donut b {
-  font:700 23px Manrope
+  font:700 23px system-ui, sans-serif
 }
 .donut small {
   color:#828897;
@@ -656,7 +656,7 @@
   padding:17px 18px 14px
 }
 .live-tag {
-  font:700 8px 'DM Sans';
+  font:700 8px system-ui, sans-serif;
   color:#a8e65a;
   letter-spacing:.5px;
   margin-left:8px;
@@ -723,7 +723,7 @@ td {
 }
 .incident-id {
   color:#798193;
-  font:600 8px 'DM Sans'
+  font:600 8px system-ui, sans-serif
 }
 .incident-cell b {
   font-size:10px;
@@ -849,7 +849,7 @@ td {
   font-size:9px
 }
 .result-count {
-  font:500 9px 'DM Sans';
+  font:500 9px system-ui, sans-serif;
   color:#9299aa;
   background:#232733;
   padding:3px 6px;
@@ -865,7 +865,7 @@ td {
   max-width:740px
 }
 .settings-panel h2 {
-  font:700 15px Manrope;
+  font:700 15px system-ui, sans-serif;
   margin:0
 }
 .settings-panel p {
@@ -946,7 +946,7 @@ footer>span {
   letter-spacing:1.1px
 }
 .modal h2 {
-  font:700 20px Manrope;
+  font:700 20px system-ui, sans-serif;
   letter-spacing:-.4px;
   margin:7px 0
 }
@@ -1033,11 +1033,11 @@ footer>span {
   padding-top:15px
 }
 .discussion h3 {
-  font:700 12px Manrope;
+  font:700 12px system-ui, sans-serif;
   margin:0 0 14px
 }
 .discussion h3 span {
-  font:500 9px 'DM Sans';
+  font:500 9px system-ui, sans-serif;
   color:#858c9a;
   background:#232733;
   padding:3px 6px;
@@ -1841,7 +1841,7 @@ footer>span {
   align-items:center;
   gap:11px;
   color:#fff1e3;
-  font:800 18px Manrope;
+  font:800 18px system-ui, sans-serif;
   letter-spacing:-.8px
 }
 .auth-brand>span:last-child>span {
@@ -1868,7 +1868,7 @@ footer>span {
   margin-right:7px
 }
 .auth-message h1 {
-  font:700 clamp(44px,5.6vw,76px)/1.07 Manrope;
+  font:700 clamp(44px,5.6vw,76px)/1.07 system-ui, sans-serif;
   color:#fff2e4;
   letter-spacing:-3.2px;
   margin:22px 0
@@ -1890,7 +1890,7 @@ footer>span {
   margin-top:50px
 }
 .auth-stat>b {
-  font:700 30px Manrope;
+  font:700 30px system-ui, sans-serif;
   color:#f28a58
 }
 .auth-stat span {
@@ -1936,7 +1936,7 @@ footer>span {
   width:min(370px,100%)
 }
 .auth-form h2 {
-  font:700 25px Manrope;
+  font:700 25px system-ui, sans-serif;
   letter-spacing:-.7px;
   color:#312219;
   margin:12px 0 5px
@@ -2370,7 +2370,7 @@ footer>span {
 .performance-heading-copy h2 {
   margin:0;
   color:#3f2c21;
-  font:700 14px Manrope,sans-serif;
+  font:700 14px system-ui, sans-serif;
   line-height:1.35
 }
 .performance-heading-copy p {
@@ -2500,7 +2500,7 @@ footer>span {
   gap:9px;
   color:#3b2a20;
   text-decoration:none;
-  font:800 16px Manrope;
+  font:800 16px system-ui, sans-serif;
   margin-bottom:66px
 }
 .public-brand>span:last-child {
@@ -2510,7 +2510,7 @@ footer>span {
   color:white
 }
 .public-status h1 {
-  font:700 clamp(30px,4vw,46px) Manrope;
+  font:700 clamp(30px,4vw,46px) system-ui, sans-serif;
   letter-spacing:-1.5px;
   margin:12px 0
 }
@@ -2566,7 +2566,7 @@ footer>span {
   letter-spacing:.7px
 }
 .status-grid b {
-  font:700 24px Manrope;
+  font:700 24px system-ui, sans-serif;
   color:#403024;
   margin-top:7px
 }
@@ -2634,14 +2634,14 @@ footer>span {
   align-items:center;
   justify-content:space-between;
   color:#664e3c;
-  font:700 10px Manrope;
+  font:700 10px system-ui, sans-serif;
   margin:1px 1px 9px
 }
 .kanban-column h3 span {
   background:#ece1d4;
   padding:3px 6px;
   border-radius:4px;
-  font:600 9px 'DM Sans'
+  font:600 9px system-ui, sans-serif
 }
 .kanban-card {
   display:grid;
@@ -2729,7 +2729,7 @@ footer>span {
   border-radius:5px;
   padding:8px;
   resize:vertical;
-  font:10px 'DM Sans';
+  font:10px system-ui, sans-serif;
   margin-bottom:7px
 }
 .user-identity .staff-presence {
@@ -3322,7 +3322,7 @@ footer>span {
   background:linear-gradient(145deg,#e96a3b,#bd4829);
   color:#fff5e9;
   box-shadow:0 5px 14px #d65d3430;
-  font:800 17px Manrope
+  font:800 17px system-ui, sans-serif
 }
 .workspace-copy {
   min-width:0
@@ -3391,6 +3391,76 @@ footer>span {
   padding:18px 0;
   color:#8f7e6f;
   font-size:11px
+}
+
+/* Maintain readable text on the warm action buttons and links. */
+.primary-button,
+.auth-submit {
+  color:#271912;
+}
+
+.main .live-tag,
+.main .text-button,
+.main .connection.online,
+.main .footer-right {
+  color:#874220;
+}
+
+.main .status-select {
+  color:#80521a;
+}
+
+.main .status-select.in-progress {
+  color:#96391f;
+}
+
+.main .people-incident-counts span,
+.main .window-status.cancelled {
+  color:#655244;
+}
+
+.auth-form>p,
+.auth-switch,
+.auth-note,
+.auth-form input::placeholder,
+.duplicate-warning small {
+  color:#705b4b;
+}
+
+.rating-box button {
+  color:#80521a;
+}
+
+/* Keep secondary copy readable against the warm ivory workspace background. */
+.main .breadcrumbs,
+.main .role-select span,
+.main .eyebrow,
+.main .page-heading p,
+.main .panel-heading p,
+.main .metric-top,
+.main .metric-card>small,
+.main .chart-y,
+.main .chart-x,
+.main .donut small,
+.main .category small,
+.main th,
+.main .incident-id,
+.main .incident-cell small,
+.main .time-cell,
+.main .more,
+.main .search,
+.main .search input::placeholder,
+.main .settings-panel p,
+.main .setting-row small,
+.main footer {
+  color:#705b4b;
+}
+
+/* Preserve visible keyboard focus while keeping the production shell fast to paint. */
+.page-loading {
+  min-height:24px;
+  color:#705b4b;
+  font-size:14px;
 }
 @media(max-width:760px) {
   .people-filters .people-filter {

@@ -11,7 +11,7 @@ export function ResolutionNotes({ incident, onChange, onSave }) {
           placeholder="Describe the fix, or explain why this report was closed as invalid or duplicate."
         />
       </label>
-      <button className="outline-button" onClick={() => onSave(incident)}>
+      <button type="button" aria-label="Save resolution notes" className="outline-button" onClick={() => onSave(incident)}>
         Save resolution notes
       </button>
     </div>

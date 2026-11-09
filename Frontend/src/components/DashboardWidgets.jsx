@@ -59,6 +59,7 @@ export function IncidentBoard({ items, update, open }) {
                     {item.priority}
                   </span>
                   <select
+                    aria-label={`Update status for ${item.title}`}
                     value={item.status}
                     onClick={event => event.stopPropagation()}
                     onChange={event => update(item.id, 'status', event.target.value)}
@@ -115,6 +116,7 @@ export function IncidentTable({ items, role, update, open }) {
               <td>
                 <select
                   className={`status-select ${item.status.toLowerCase().replace(' ', '-')}`}
+                  aria-label={`Status for ${item.title}`}
                   value={item.status}
                   onClick={event => event.stopPropagation()}
                   onChange={event => update(item.id, 'status', event.target.value)}

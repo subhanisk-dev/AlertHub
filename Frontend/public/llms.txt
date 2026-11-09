@@ -1,0 +1,11 @@
+# AlertHub
+
+AlertHub is a real-time incident reporting and response workspace.
+
+## Public information
+
+- [Public service status](/status): current system health, incident totals, and scheduled maintenance.
+
+## Account access
+
+Incident reports, staff assignments, discussions, analytics, and account settings require an authorized AlertHub account.

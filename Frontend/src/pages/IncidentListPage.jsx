@@ -53,7 +53,7 @@ export function IncidentListPage({
           <h2>{role === 'Staff' ? 'Assigned incidents' : 'All incidents'} <span className="result-count">{items.length}</span></h2>
           <p>{role === 'Staff' ? 'Review and update incidents assigned to you.' : 'Manage reports across your workspace.'}</p>
         </div>
-        <button className="outline-button" onClick={exportCsv}>↓ Export CSV</button>
+        <button aria-label="Export incidents as CSV" className="outline-button" onClick={exportCsv}>↓ Export CSV</button>
       </header>
 
       <div className="toolbar">
@@ -67,10 +67,10 @@ export function IncidentListPage({
           <kbd>⌘ K</kbd>
         </div>
 
-        <select className="filter-select" value={statusFilter} onChange={event => setStatusFilter(event.target.value)}>
+        <select className="filter-select" aria-label="Filter incidents by status" value={statusFilter} onChange={event => setStatusFilter(event.target.value)}>
           {['All incidents', ...statuses].map(status => <option key={status}>{status}</option>)}
         </select>
-        <select className="filter-select" value={categoryFilter} onChange={event => setCategoryFilter(event.target.value)}>
+        <select className="filter-select" aria-label="Filter incidents by category" value={categoryFilter} onChange={event => setCategoryFilter(event.target.value)}>
           <option>All categories</option>
           <option>IT &amp; Network</option>
           <option>Facilities</option>
@@ -80,14 +80,14 @@ export function IncidentListPage({
         </select>
 
         {role === 'Admin' && (
-          <select className="filter-select" value={staffFilter} onChange={event => setStaffFilter(event.target.value)}>
+          <select className="filter-select" aria-label="Filter incidents by assigned staff" value={staffFilter} onChange={event => setStaffFilter(event.target.value)}>
             <option>All staff</option>
             <option>Unassigned</option>
             {staff.map(person => <option key={person.id}>{person.name}</option>)}
           </select>
         )}
 
-        <select className="filter-select" value={priorityFilter} onChange={event => setPriorityFilter(event.target.value)}>
+        <select className="filter-select" aria-label="Filter incidents by priority" value={priorityFilter} onChange={event => setPriorityFilter(event.target.value)}>
           <option>All priorities</option>
           <option>Critical</option>
           <option>High</option>
@@ -110,11 +110,11 @@ export function IncidentListPage({
           onChange={event => setDateTo(event.target.value)}
         />
 
-        <div className="view-switch" aria-label="Incident layout">
-          <button className={viewMode === 'table' ? 'selected' : ''} onClick={() => setViewMode('table')}>
+        <div className="view-switch" role="group" aria-label="Incident layout">
+          <button type="button" aria-label="Show incidents as a table" aria-pressed={viewMode === 'table'} className={viewMode === 'table' ? 'selected' : ''} onClick={() => setViewMode('table')}>
             ☷ Table
           </button>
-          <button className={viewMode === 'board' ? 'selected' : ''} onClick={() => setViewMode('board')}>
+          <button type="button" aria-label="Show incidents as a board" aria-pressed={viewMode === 'board'} className={viewMode === 'board' ? 'selected' : ''} onClick={() => setViewMode('board')}>
             ▦ Board
           </button>
         </div>

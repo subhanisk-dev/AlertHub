@@ -115,7 +115,7 @@ export function MaintenancePage({ items, setItems, notify, onError }) {
         </label>
         <label>
           Affected category
-          <select value={form.category} onChange={event => updateField('category', event.target.value)}>
+          <select aria-label="Affected service category" value={form.category} onChange={event => updateField('category', event.target.value)}>
             <option>IT &amp; Network</option>
             <option>Facilities</option>
             <option>Security</option>
@@ -170,9 +170,9 @@ export function MaintenancePage({ items, setItems, notify, onError }) {
               <span className={`window-status ${item.active ? 'scheduled' : 'cancelled'}`}>
                 {item.active ? 'Scheduled' : 'Cancelled'}
               </span>
-              <button type="button" className="outline-button" onClick={() => editWindow(item)}>Edit</button>
+              <button type="button" aria-label={`Edit ${item.title}`} className="outline-button" onClick={() => editWindow(item)}>Edit</button>
               {item.active && (
-                <button type="button" className="cancel-window-button" onClick={() => cancelWindow(item)}>
+                <button type="button" aria-label={`Cancel ${item.title}`} className="cancel-window-button" onClick={() => cancelWindow(item)}>
                   Cancel
                 </button>
               )}

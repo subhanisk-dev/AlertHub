@@ -38,6 +38,7 @@ export function SettingsPage({
           <small>{pushDescription}</small>
         </span>
         <button
+          aria-label={pushActionLabel}
           className="outline-button"
           disabled={!pushConfigured && !pushEnabled}
           onClick={pushAction}

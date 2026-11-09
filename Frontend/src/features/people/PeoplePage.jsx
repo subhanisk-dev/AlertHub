@@ -36,7 +36,7 @@ export function PeoplePage({ users, setUsers, onError }) {
         </div>
       </header>
 
-      <div className="people-filters" aria-label="People filters">
+      <div className="people-filters" role="group" aria-label="People filters">
         <select
           className="filter-select people-filter"
           aria-label="Filter people by role"

@@ -37,6 +37,7 @@ export function NotificationCenter({
       </div>
       {notifications.length ? notifications.map(notification => (
         <button
+          aria-label={notification.message || 'Open incident notification'}
           className={`notification-item ${notification.read_at ? 'read' : ''}`}
           key={notification.id}
           onClick={() => openNotification(notification)}
