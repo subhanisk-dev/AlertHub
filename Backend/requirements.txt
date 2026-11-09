@@ -1,0 +1,8 @@
+Flask==3.1.2
+Flask-Cors==6.0.1
+Flask-SocketIO==5.5.1
+mysql-connector-python==9.5.0
+PyJWT==2.10.1
+python-dotenv==1.1.1
+simple-websocket==1.1.0
+pywebpush==2.3.0

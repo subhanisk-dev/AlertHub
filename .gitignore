@@ -1,0 +1,12 @@
+Backend/.env
+Backend/vapid_private.pem
+Backend/venv/
+Backend/.venv/
+Backend/__pycache__/
+Backend/uploads/
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.env.local
+__pycache__/
+*.py[cod]
+Backend/.env.example
