@@ -1,6 +1,7 @@
 // Shared HTTP, session, and realtime helpers used across the frontend.
 // Call Flask directly for local use; override this only when the backend has another URL.
-export const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000')
+// Use Vite's local proxy in development and the deployed site's own origin in production.
+export const API_URL = (import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? '' : window.location.origin))
   .replace(/\/+$/, '')
 const AUTHENTICATION_ERRORS = new Set([
   'Authentication required',

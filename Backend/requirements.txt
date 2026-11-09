@@ -6,3 +6,4 @@ PyJWT==2.10.1
 python-dotenv==1.1.1
 simple-websocket==1.1.0
 pywebpush==2.3.0
+gunicorn==23.0.0

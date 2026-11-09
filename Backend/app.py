@@ -15,24 +15,30 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 # Load shared database helpers that bind user values as SQL parameters.
+from alerthub.config import APP_ENV, validate_production_settings
 from alerthub.database import db, init_db, query
 from alerthub.security import create_authenticator
 
 # Create the Flask app and apply request-size, signing-key, and allowed-origin settings.
 app = Flask(__name__)
+# Validate production secrets and browser origins before exposing the API.
+validate_production_settings()
 # Reject request bodies larger than the supported incident attachment size.
 app.config['MAX_CONTENT_LENGTH'] = 9 * 1024 * 1024
 # Sign JWTs with the deployment secret configured in Backend/.env.
-app.config['SECRET_KEY'] = os.getenv('JWT_SECRET', 'change-this-development-secret')
+app.config['SECRET_KEY'] = os.getenv('JWT_SECRET', 'local-development-secret-change-before-deploy')
+app.config['DEBUG'] = APP_ENV != 'production' and os.getenv('FLASK_DEBUG') == '1'
 # Limit browser API access to the configured frontend origin or origins.
-CORS(app, origins=os.getenv('FRONTEND_ORIGIN', 'http://localhost:5173').split(','))
+FRONTEND_ORIGINS = [
+    origin.strip().rstrip('/')
+    for origin in os.getenv('FRONTEND_ORIGIN', 'http://localhost:5173').split(',')
+    if origin.strip()
+]
+CORS(app, origins=FRONTEND_ORIGINS)
 # Configure Socket.IO to accept live connections from the same trusted frontend origins.
 socketio = SocketIO(
     app,
-    cors_allowed_origins=os.getenv(
-        'FRONTEND_ORIGIN',
-        'http://localhost:5173',
-    ).split(','),
+    cors_allowed_origins=FRONTEND_ORIGINS,
     async_mode='threading',
 )
 socket_users = {}
@@ -75,8 +81,10 @@ def health():
     try:
         query('SELECT 1', one=True)
         return jsonify(status='ok', database='connected')
-    except mysql.connector.Error as exc:
-        return jsonify(status='degraded', database='unavailable', error=str(exc)), 503
+    except mysql.connector.Error:
+        # Keep connection details in server logs rather than exposing them in a public health response.
+        app.logger.exception('Health check could not connect to MySQL')
+        return jsonify(status='degraded', database='unavailable'), 503
 
 
 # Public registration permits only user and staff roles and stores a password hash.
@@ -1073,7 +1081,10 @@ def rate_incident(incident_id):
 
 
 # Store uploaded proof in one private folder and accept only known safe file types.
-UPLOAD_DIR = os.path.join(os.path.dirname(__file__), 'uploads')
+UPLOAD_DIR = os.getenv(
+    'UPLOAD_DIR',
+    os.path.join(os.path.dirname(__file__), 'uploads'),
+)
 ALLOWED_UPLOADS = {'image/jpeg', 'image/png', 'image/webp', 'application/pdf'}
 
 
@@ -1631,6 +1642,8 @@ def incident_typing(payload):
 
 # Local startup initializes MySQL, starts SLA checks, and serves HTTP plus WebSockets.
 if __name__ == '__main__':
+    if APP_ENV == 'production':
+        raise SystemExit('Run production with the configured Gunicorn WSGI entry point.')
     try:
         init_db()
     except mysql.connector.Error as exc:
@@ -1640,7 +1653,7 @@ if __name__ == '__main__':
         app,
         host=os.getenv('HOST', '127.0.0.1'),
         port=int(os.getenv('PORT', '5000')),
-        debug=os.getenv('FLASK_DEBUG') == '1',
+        debug=app.config['DEBUG'],
         use_reloader=False,
         allow_unsafe_werkzeug=True,
     )

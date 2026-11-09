@@ -4,6 +4,8 @@ AlertHub is an incident reporting and response workspace. Users report issues an
 
 For a code map, feature lookup, role rules, and safe extension steps, see [the project guide](docs/PROJECT_GUIDE.md).
 
+For a production deployment with Docker, MySQL, HTTPS, persistent uploads, and live WebSockets, see [the production deployment guide](deploy/PRODUCTION.md).
+
 ## Run locally
 
 ### 1. Start MySQL and configure the backend

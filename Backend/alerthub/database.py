@@ -33,21 +33,26 @@ def query(sql, args=(), one=False, commit=False):
         conn.close()
 
 
-# Create missing tables from the shared project schema during startup.
-def init_db():
-    connection = mysql.connector.connect(
-        host=os.getenv('DB_HOST', 'localhost'),
-        port=int(os.getenv('DB_PORT', '3306')),
-        user=os.getenv('DB_USER', 'root'),
-        password=os.getenv('DB_PASSWORD', ''),
-    )
+# Create the configured database and apply the shared schema for local setup or one-off migrations.
+def init_db(create_database=True):
+    connection_settings = {
+        'host': os.getenv('DB_HOST', 'localhost'),
+        'port': int(os.getenv('DB_PORT', '3306')),
+        'user': os.getenv('DB_USER', 'root'),
+        'password': os.getenv('DB_PASSWORD', ''),
+    }
+    if not create_database:
+        connection_settings['database'] = DB_NAME
+
+    connection = mysql.connector.connect(**connection_settings)
     try:
         cursor = connection.cursor()
-        cursor.execute(
-            f'CREATE DATABASE IF NOT EXISTS `{DB_NAME}` '
-            'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
-        )
-        connection.database = DB_NAME
+        if create_database:
+            cursor.execute(
+                f'CREATE DATABASE IF NOT EXISTS `{DB_NAME}` '
+                'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
+            )
+            connection.database = DB_NAME
         schema_path = Path(__file__).resolve().parents[2] / 'Database' / 'schema.sql'
         schema = schema_path.read_text(encoding='utf-8')
         schema = '\n'.join(line for line in schema.splitlines() if not line.lstrip().startswith('--'))
